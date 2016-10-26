@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>snek!</title>
+    <title>snek</title>
     <style>
         * { margin: 0; padding: 0;}
 
