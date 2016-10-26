@@ -1,6 +1,6 @@
 $(function() {
     initCanvas();
-    initSocket("192.168.1.150", 9002);
+    initSocket("boman.io", 9002);
 
     socket.onopen = function(event) {
     };
