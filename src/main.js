@@ -1,5 +1,3 @@
-/*import { Player } from './player';
-
 class Main {
 
     constructor() {
@@ -14,7 +12,7 @@ class Main {
     }
 
     update() {
-        this.world.update();
+        //this.world.update();
     }
 
     stop() {
@@ -24,4 +22,4 @@ class Main {
 }
 
 main = new SnakeMain();
-main.start();*/
+main.start();
