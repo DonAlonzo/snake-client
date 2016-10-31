@@ -1,10 +1,13 @@
+import { Player } from './player';
+import { World } from './world';
+
 class Main {
 
     constructor() {
-        //this.player = new Player();
-        //this.world = new World();
+        this.player = new Player();
+        this.world = new World();
 
-        //this.world.addEntity(this.player);
+        this.world.addEntity(this.player);
     }
 
     start() {
@@ -12,7 +15,7 @@ class Main {
     }
 
     update() {
-        //this.world.update();
+        this.world.update();
     }
 
     stop() {
