@@ -1,4 +1,4 @@
-class Food extends Entity {
+export default class Food extends Entity {
 
     constructor(position) {
         super();

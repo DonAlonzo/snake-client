@@ -1,5 +1,5 @@
-import { Player } from './player';
-import { World } from './world';
+import Player from './player';
+import World from './world';
 
 class Main {
 
@@ -11,7 +11,7 @@ class Main {
     }
 
     start() {
-        this.timer = setTimeout(update, 100, true);
+        this.timer = setInterval(() => { this.update(); }, 10);
     }
 
     update() {
@@ -19,10 +19,10 @@ class Main {
     }
 
     stop() {
-        this.timer.stop();
+        clearInterval(timer);
     }
 
 }
 
-main = new SnakeMain();
+var main = new Main();
 main.start();
