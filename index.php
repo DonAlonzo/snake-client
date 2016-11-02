@@ -9,6 +9,8 @@
 
         #canvas {
             position:absolute;
+            width:100%;
+            height:100%;
         }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
