@@ -62,6 +62,13 @@ class Main {
             main.onKeyUp({ keyCode: e.keyCode, key: e.key, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey, altKey: e.altKey })
             return false;
         });
+
+        $(window).resize(() => {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            this.graphics.width = window.innerWidth;
+            this.graphics.height = window.innerHeight;
+        });
     }
 
     onSocketOpen() {

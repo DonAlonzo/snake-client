@@ -13,7 +13,7 @@ export default class Explosion extends Entity {
 
     onMessage(message) {
         if (message.origin == this.constructor.name) {
-            console.log(message.action);
+            console.log(message.action + " (" + message.entityid + ")");
         }
     }
 
