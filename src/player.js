@@ -9,11 +9,24 @@ export default class Player extends Entity {
         this.direction = direction;
     }
 
+    onMessage(message) {
+        if (message.origin == this.constructor.name) {
+            console.log(message);
+        }
+    }
+
+    onMouseDown(x, y) {
+        this.sendGlobal({
+            action: "click",
+            x: x,
+            y: y
+        });
+    }
+
     update(deltaTime) {
     }
 
     draw(graphics) {
-
     }
 
 }

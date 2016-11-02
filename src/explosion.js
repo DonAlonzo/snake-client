@@ -11,10 +11,20 @@ export default class Explosion extends Entity {
         this.lifetime = 80;
     }
 
+    onMessage(message) {
+        if (message.origin == this.constructor.name) {
+            console.log(message.action);
+        }
+    }
+
     update(deltaTime) {
         this.size += this.speed * deltaTime;
         if (this.size > this.lifetime) {
             this.kill();
+
+            this.sendLocal({
+                action: "boom"
+            });
         }
     }
 

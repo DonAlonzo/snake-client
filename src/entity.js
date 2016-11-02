@@ -14,4 +14,22 @@ export default class Entity {
     draw(graphics) {
     }
 
+    onMessage(message) {
+    }
+
+    onMouseDown(x, y) {
+    }
+
+    onMouseUp(x, y) {
+    }
+
+    onMouseMove(x, y) {
+    }
+
+    onKeyDown(event) {
+    }
+
+    onKeyUp(event) {
+    }
+
 }

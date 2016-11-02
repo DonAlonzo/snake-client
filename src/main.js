@@ -7,9 +7,9 @@ class Main {
 
     constructor() {
         this.initContext();
-        this.initWorld();
         this.initSocket("boman.io", 9002)
-        this.initInputListeners();
+        this.initWorld( );
+        this.initEvents();
     }
 
     initContext() {
@@ -21,8 +21,11 @@ class Main {
     }
 
     initWorld() {
-        this.player = new Player();
         this.world = new World();
+        this.world.sendGlobal = message => this.socket.send(JSON.stringify(message));
+        this.world.sendLocal = message => this.onMessage(message);
+
+        this.player = new Player();
         this.world.addEntity(this.player);
     }
 
@@ -33,22 +36,44 @@ class Main {
         this.socket.onclose = () => this.onSocketClose()
     }
 
-    initInputListeners() {
+    initEvents() {
         var main = this;
-        $("#canvas").click(function(event) {
-            main.onClick(event.pageX, event.pageY);
+        $(document)
+        .mousedown(e => {
+            main.onMouseDown(e.pageX, e.pageY);
+            return false;
+        })
+        .mouseup(e => {
+            main.onMouseUp(e.pageX, e.pageY);
+            return false;
+        })
+        .contextmenu(() => {
+            return false;
+        })
+        .mousemove(e => {
+            main.onMouseMove(e.pageX, e.pageY);
+            return false;
+        })
+        .keydown(e => {
+            main.onKeyDown({ keyCode: e.keyCode, key: e.key, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey, altKey: e.altKey })
+            return false;
+        })
+        .keyup(e => {
+            main.onKeyUp({ keyCode: e.keyCode, key: e.key, shiftKey: e.shiftKey, ctrlKey: e.ctrlKey, altKey: e.altKey })
+            return false;
         });
     }
 
     onSocketOpen() {
-        console.log('Connection established.')
+        console.log("Connection established.")
     }
 
     onSocketClose() {
-        console.log('Connection closed.')
+        console.log("Connection closed.")
     }
 
     onMessage(message) {
+        this.world.onMessage(message);
         switch (message.action) {
             case "click":
                 this.world.addEntity(new Explosion(message.x, message.y));
@@ -56,16 +81,24 @@ class Main {
         }
     }
 
-    onClick(x, y) {
-        this.send({
-            action: "click",
-            x: x,
-            y: y
-        });
+    onMouseDown(x, y) {
+        this.world.onMouseDown(x, y);
     }
 
-    send(message) {
-        this.socket.send(JSON.stringify(message));
+    onMouseUp(x, y) {
+        this.world.onMouseUp(x, y);
+    }
+
+    onMouseMove(x, y) {
+        this.world.onMouseMove(x, y);
+    }
+
+    onKeyDown(event) {
+        this.world.onMouseMove(event);
+    }
+
+    onKeyUp(event) {
+        this.world.onMouseMove(event);
     }
 
     start() {
@@ -83,8 +116,8 @@ class Main {
     }
 
     draw(t) {
-        var r = (Math.sin(t / 1000) + 1) / 2;
-        var g = (Math.cos(t / 1000) + 1) / 2;
+        var r = (Math.sin(t / 2000) + 1) * 0.5 * 0.6 + 0.2;
+        var g = (Math.cos(t / 2000) + 1) * 0.5 * 0.6 + 0.2;
         var b = 0.5;
         this.graphics.fillColor(r, g, b);
         this.graphics.clear();
