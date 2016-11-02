@@ -15,8 +15,9 @@ const config = {
 	dest: '.'
 };
 
-let bundle = (bundler) => {
-	bundler
+gulp.task('build', () => {
+	return browserify(config.src, {debug:true})
+		.transform(babelify, {presets: ['latest']})
 		.bundle()
 		.on('error', (e) => gutil.log(gutil.colors.red(e.message)))
 		.pipe(source('bundled-app.js'))
@@ -24,13 +25,10 @@ let bundle = (bundler) => {
 		.pipe(rename('game.js'))
 		.pipe(gulp.dest(config.dest))
 		.on('end', () => gutil.log(gutil.colors.green('==> Update!')));
-}
-
-gulp.task('default', () => {
-	let bundler = browserify(config.src, {debug: true})
-		.plugin(watchify) 
-		.transform(babelify, {presets: ['latest']}); 
-
-	bundle(bundler);
-	bundler.on('update', () => bundle(bundler));
 });
+
+gulp.task('watch', ['build'], () => {
+	gulp.watch('.src/*.js', ['build']);
+});
+
+gulp.task('default', ['watch']);
