@@ -7,8 +7,8 @@ export default class Explosion extends Entity {
         this.x = x;
         this.y = y;
         this.size = 0;
-        this.speed = 0.05;
-        this.lifetime = 100;
+        this.speed = 0.1;
+        this.lifetime = 150;
     }
 
     update(deltaTime) {
@@ -19,10 +19,11 @@ export default class Explosion extends Entity {
     }
 
     draw(graphics) {
-        graphics.fillColor(1, 1, 0, 1 - this.size / this.lifetime);
+        var t = this.size / this.lifetime;
+        graphics.fillColor(1, 1, 0, 1 - t);
         graphics.fillCircle(this.x, this.y, this.size);
-        graphics.drawColor(1, 0, 0, 1 - this.size / this.lifetime);
-        graphics.drawCircle(this.x, this.y, this.size, 5);
+        graphics.drawColor(1, 0, 0, 1 - t);
+        graphics.drawCircle(this.x, this.y, this.size, t * 10);
     }
 
 }
