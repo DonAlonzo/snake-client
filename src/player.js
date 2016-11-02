@@ -1,12 +1,12 @@
 import Entity from './entity'
+import Point from './point'
 
 export default class Player extends Entity {
 
-    constructor(startPosition, length, direction) {
+    constructor(x, y) {
         super();
-        this.startPosition = startPosition;
-        this.length = length;
-        this.direction = direction;
+        this.startPosition = new Point(x, y);
+        this.drawOrder = 1000;
     }
 
     onMessage(message) {
@@ -27,6 +27,8 @@ export default class Player extends Entity {
     }
 
     draw(graphics) {
+        graphics.fillColor(0, 0, 0, 1);
+        graphics.fillText("Player", this.startPosition.x, this.startPosition.y);
     }
 
 }

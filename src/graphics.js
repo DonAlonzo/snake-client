@@ -38,4 +38,9 @@ export default class Graphics {
         this.context.stroke();
     }
 
+    fillText(text, x, y, fontSize = 16, bold = true, font = "Arial") {
+        this.context.font = (bold ? "bold" : "") + " " + fontSize + "px" + " " + font;
+        this.context.fillText(text, x, y);
+    }
+
 }

@@ -21,6 +21,7 @@ export default class World {
         };
 
         this.entities.push(entity);
+        this.entities.sort((a, b) => a.drawOrder > b.drawOrder);
     }
 
     removeEntity(entity) {

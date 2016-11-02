@@ -25,7 +25,7 @@ class Main {
         this.world.sendGlobal = message => this.socket.send(JSON.stringify(message));
         this.world.sendLocal = message => this.onMessage(message);
 
-        this.player = new Player();
+        this.player = new Player(100, 100);
         this.world.addEntity(this.player);
     }
 

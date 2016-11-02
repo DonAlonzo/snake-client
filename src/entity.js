@@ -2,6 +2,7 @@ export default class Entity {
 
     constructor() {
         this.alive = true;
+        this.drawOrder = 0;
     }
 
     kill() {
