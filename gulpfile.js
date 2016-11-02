@@ -18,6 +18,7 @@ const config = {
 let bundle = (bundler) => {
 	bundler
 		.bundle()
+		.on('error', (e) => gutil.log(gutil.colors.red(e.message)))
 		.pipe(source('bundled-app.js'))
 		.pipe(buffer())
 		.pipe(rename('game.js'))

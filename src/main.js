@@ -1,21 +1,23 @@
+import Explosion from './explosion';
 import Player from './player';
+import Graphics from './graphics';
 import World from './world';
 
 class Main {
 
     constructor() {
-        this.initGL();
+        this.initContext();
         this.initWorld();
         this.initSocket("boman.io", 9002)
         this.initInputListeners();
     }
 
-    initGL() {
-        var canvas = document.getElementById("canvas");
-        this.gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-        if (!this.gl) {
-            alert("Unable to initialize WebGL. Your browser may not support it.");
-        }
+    initContext() {
+        this.canvas = document.getElementById("canvas");
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+
+        this.graphics = new Graphics(canvas.getContext("2d"), this.canvas.width, this.canvas.height);
     }
 
     initWorld() {
@@ -47,7 +49,11 @@ class Main {
     }
 
     onMessage(message) {
-        console.log(message)
+        switch (message.action) {
+            case "click":
+                this.world.addEntity(new Explosion(message.x, message.y));
+                break;
+        }
     }
 
     onClick(x, y) {
@@ -63,21 +69,25 @@ class Main {
     }
 
     start() {
-        this.timer = setInterval(() => { this.update(this.gl); }, 10);
+        this.timer = setInterval(() => {
+            var t = new Date().getTime();
+            var deltaTime = t - this.lastUpdate;
+            this.update(deltaTime);
+            this.draw(t);
+            this.lastUpdate = t;
+        }, 10);
     }
 
-    update(gl) {
-        this.world.update();
+    update(deltaTime) {
+        this.world.update(deltaTime);
+    }
 
-        var t = new Date().getTime() / 1000;
-        var r = (Math.sin(t) + 1) / 2;
-        var g = (Math.cos(t) + 1) / 2;
-        var b = 0.5;
-
-        gl.clearColor(r, g, b, 1.0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LEQUAL);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    draw(t) {
+        //var r = (Math.sin(t / 1000) + 1) / 2;
+        //var g = (Math.cos(t / 1000) + 1) / 2;
+        //var b = 0.5;
+        //graphics.fill
+        this.world.draw(this.graphics);
     }
 
     stop() {

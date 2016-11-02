@@ -9,17 +9,26 @@ export default class World {
     }
 
     removeEntity(entity) {
-        var i = entities.indexOf(entity);
+        var i = this.entities.indexOf(entity);
         if (i != -1) {
-            entities.splice(i, 1);
+            this.entities.splice(i, 1);
         } else {
             throw new Exception("No such element");
         }
     }
 
-    update() {
+    update(deltaTime) {
         this.entities.forEach((entity) => {
-            entity.update();
+            entity.update(deltaTime);
+            if (!entity.alive) {
+                this.removeEntity(entity);
+            }
+        });
+    }
+
+    draw(graphics) {
+        this.entities.forEach((entity) => {
+            entity.draw(graphics);
         });
     }
 

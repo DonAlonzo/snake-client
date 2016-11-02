@@ -9,7 +9,10 @@ export default class Player extends Entity {
         this.direction = direction;
     }
 
-    update() {
+    update(deltaTime) {
+    }
+
+    draw(graphics) {
     }
 
 }
