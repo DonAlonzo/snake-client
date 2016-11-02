@@ -83,10 +83,11 @@ class Main {
     }
 
     draw(t) {
-        //var r = (Math.sin(t / 1000) + 1) / 2;
-        //var g = (Math.cos(t / 1000) + 1) / 2;
-        //var b = 0.5;
-        //graphics.fill
+        var r = (Math.sin(t / 1000) + 1) / 2;
+        var g = (Math.cos(t / 1000) + 1) / 2;
+        var b = 0.5;
+        this.graphics.fillColor(r, g, b);
+        this.graphics.clear();
         this.world.draw(this.graphics);
     }
 
