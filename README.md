@@ -1,3 +1,11 @@
+### Auto-building for development
+
 ```
-browserify src/main.js -o snake.js -t [ babelify --presets [ latest ] ]
+gulp
+```
+
+### Building for production
+
+```
+gulp build
 ```
