@@ -10,7 +10,6 @@ export default class Player extends Entity {
     }
 
     update() {
-        console.log("hehe");
     }
 
 }

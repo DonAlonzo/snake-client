@@ -6,6 +6,8 @@ class Main {
     constructor() {
         this.initGL();
         this.initWorld();
+        this.initSocket("boman.io", 9002)
+        this.initInputListeners();
     }
 
     initGL() {
@@ -20,6 +22,44 @@ class Main {
         this.player = new Player();
         this.world = new World();
         this.world.addEntity(this.player);
+    }
+
+    initSocket(server, port) {
+        this.socket = new WebSocket("ws://" + server + ":" + port);
+        this.socket.onopen = () => this.onSocketOpen()
+        this.socket.onmessage = (message) => this.onMessage(JSON.parse(message.data))
+        this.socket.onclose = () => this.onSocketClose()
+    }
+
+    initInputListeners() {
+        var main = this;
+        $("#canvas").click(function(event) {
+            main.onClick(event.pageX, event.pageY);
+        });
+    }
+
+    onSocketOpen() {
+        console.log('Connection established.')
+    }
+
+    onSocketClose() {
+        console.log('Connection closed.')
+    }
+
+    onMessage(message) {
+        console.log(message)
+    }
+
+    onClick(x, y) {
+        this.send({
+            action: "click",
+            x: x,
+            y: y
+        });
+    }
+
+    send(message) {
+        this.socket.send(JSON.stringify(message));
     }
 
     start() {
