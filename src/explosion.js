@@ -8,7 +8,7 @@ export default class Explosion extends Entity {
         this.y = y;
         this.size = 0;
         this.speed = 0.1;
-        this.lifetime = 150;
+        this.lifetime = 80;
     }
 
     update(deltaTime) {
