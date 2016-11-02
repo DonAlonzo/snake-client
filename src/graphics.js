@@ -38,5 +38,4 @@ export default class Graphics {
         this.context.stroke();
     }
 
-
 }

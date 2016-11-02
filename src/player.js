@@ -13,6 +13,7 @@ export default class Player extends Entity {
     }
 
     draw(graphics) {
+
     }
 
 }
