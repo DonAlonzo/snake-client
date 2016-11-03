@@ -27,6 +27,9 @@ export default class Entity {
     onMouseMove(x, y) {
     }
 
+    onMouseDrag(x, y) {
+    }
+
     onKeyDown(event) {
     }
 

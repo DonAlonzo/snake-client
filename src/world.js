@@ -6,7 +6,7 @@ export default class World {
     }
 
     addEntity(entity) {
-        entity.id = this.nextEntityID++;
+        entity.id = Math.random().toString(36).substring(2, 7);
 
         entity.sendGlobal = (message) => {
             message.origin = entity.constructor.name;
@@ -69,6 +69,12 @@ export default class World {
     onMouseMove(x, y) {
         this.entities.forEach((entity) => {
             entity.onMouseMove(x, y);
+        });
+    }
+
+    onMouseDrag(x, y) {
+        this.entities.forEach((entity) => {
+            entity.onMouseDrag(x, y);
         });
     }
 

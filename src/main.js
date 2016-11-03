@@ -89,15 +89,20 @@ class Main {
     }
 
     onMouseDown(x, y) {
+        this.mouseDown = true;
         this.world.onMouseDown(x, y);
     }
 
     onMouseUp(x, y) {
+        this.mouseDown = false;
         this.world.onMouseUp(x, y);
     }
 
     onMouseMove(x, y) {
         this.world.onMouseMove(x, y);
+        if (this.mouseDown) {
+            this.world.onMouseDrag(x, y);
+        }
     }
 
     onKeyDown(event) {
@@ -110,7 +115,7 @@ class Main {
 
     start() {
         this.timer = setInterval(() => {
-            var t = new Date().getTime();
+            var t = new Date().getTime() / 1000;
             var deltaTime = t - this.lastUpdate;
             this.update(deltaTime);
             this.draw(t);
@@ -123,8 +128,8 @@ class Main {
     }
 
     draw(t) {
-        var r = (Math.sin(t / 2000) + 1) * 0.5 * 0.6 + 0.2;
-        var g = (Math.cos(t / 2000) + 1) * 0.5 * 0.6 + 0.2;
+        var r = (Math.sin(t) + 1) * 0.5 * 0.6 + 0.2;
+        var g = (Math.cos(t) + 1) * 0.5 * 0.6 + 0.2;
         var b = 0.5;
         this.graphics.fillColor(r, g, b);
         this.graphics.clear();

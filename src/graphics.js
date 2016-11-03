@@ -6,6 +6,10 @@ export default class Graphics {
         this.height = height;
     }
 
+    textWidth(text) {
+        return this.context.measureText(text).width;
+    }
+
     rgb2hex(r, g, b) {
         var rgb = (b*255) | ((g*255) << 8) | ((r*255) << 16);
         return '#' + (0x1000000 + rgb).toString(16).slice(1);
