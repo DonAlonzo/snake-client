@@ -11,9 +11,11 @@
             position:absolute;
             width:100%;
             height:100%;
+            -ms-touch-action:manipulation;
+            touch-action:manipulation;
         }
     </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 </head>
 <body>
 	<canvas id="canvas"></canvas>
