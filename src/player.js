@@ -20,6 +20,11 @@ export default class Player extends Entity {
         }
     }
 
+    onMouseDown(x, y) {
+        this.target.x = x;
+        this.target.y = y;
+    }
+
     onMouseDrag(x, y) {
         this.target.x = x;
         this.target.y = y;
