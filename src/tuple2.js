@@ -5,6 +5,10 @@ export default class Tuple2 {
         this.y = y;
     }
 
+    clone() {
+        return new Tuple2(this.x, this.y);
+    }
+
     add(b) {
         return new Tuple2(this.x + b.x, this.y + b.y);
     }

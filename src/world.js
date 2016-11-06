@@ -33,9 +33,9 @@ export default class World {
         }
     }
 
-    update(deltaTime) {
+    update(state) {
         this.entities.forEach((entity) => {
-            entity.update(deltaTime);
+            entity.update(state);
             if (!entity.alive) {
                 this.removeEntity(entity);
             }
@@ -80,13 +80,13 @@ export default class World {
 
     onKeyDown(event) {
         this.entities.forEach((entity) => {
-            entity.onMouseMove(event);
+            entity.onKeyDown(event);
         });
     }
 
     onKeyUp(event) {
         this.entities.forEach((entity) => {
-            entity.onMouseMove(event);
+            entity.onKeyUp(event);
         });
     }
 

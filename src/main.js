@@ -8,7 +8,7 @@ class Main {
     constructor() {
         this.initContext();
         this.initSocket("boman.io", 9002)
-        this.initWorld( );
+        this.initWorld();
         this.initEvents();
     }
 
@@ -20,6 +20,13 @@ class Main {
         this.graphics = new Graphics(canvas.getContext("2d"), this.canvas.width, this.canvas.height);
     }
 
+    initSocket(server, port) {
+        this.socket = new WebSocket("ws://" + server + ":" + port);
+        this.socket.onopen = () => this.onSocketOpen()
+        this.socket.onmessage = (message) => this.onMessage(JSON.parse(message.data))
+        this.socket.onclose = () => this.onSocketClose()
+    }
+
     initWorld() {
         this.world = new World();
         this.world.sendGlobal = message => this.socket.send(JSON.stringify(message));
@@ -27,13 +34,6 @@ class Main {
 
         this.player = new Player(100, 100);
         this.world.addEntity(this.player);
-    }
-
-    initSocket(server, port) {
-        this.socket = new WebSocket("ws://" + server + ":" + port);
-        this.socket.onopen = () => this.onSocketOpen()
-        this.socket.onmessage = (message) => this.onMessage(JSON.parse(message.data))
-        this.socket.onclose = () => this.onSocketClose()
     }
 
     initEvents() {
@@ -106,25 +106,27 @@ class Main {
     }
 
     onKeyDown(event) {
-        this.world.onMouseMove(event);
+        this.world.onKeyDown(event);
     }
 
     onKeyUp(event) {
-        this.world.onMouseMove(event);
+        this.world.onKeyUp(event);
     }
 
     start() {
         this.timer = setInterval(() => {
             var t = new Date().getTime() / 1000;
-            var deltaTime = t - this.lastUpdate;
-            this.update(deltaTime);
+            var state = {
+                deltaTime: t - this.lastUpdate
+            };
+            this.update(state);
             this.draw(t);
             this.lastUpdate = t;
         }, 10);
     }
 
-    update(deltaTime) {
-        this.world.update(deltaTime);
+    update(state) {
+        this.world.update(state);
     }
 
     draw(t) {

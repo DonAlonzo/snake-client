@@ -47,4 +47,8 @@ export default class Graphics {
         this.context.fillText(text, x, y);
     }
 
+    drawImage(image, x, y, width=image.width, height=image.height) {
+        this.context.drawImage(image, x, y, width, height);
+    }
+
 }

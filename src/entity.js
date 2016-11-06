@@ -9,7 +9,7 @@ export default class Entity {
         this.alive = false;
     }
 
-    update(deltaTime) {
+    update(state) {
     }
 
     draw(graphics) {

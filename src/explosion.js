@@ -17,8 +17,8 @@ export default class Explosion extends Entity {
         }
     }
 
-    update(deltaTime) {
-        this.size += this.speed * deltaTime;
+    update(state) {
+        this.size += this.speed * state.deltaTime;
         if (this.size > this.lifetime) {
             this.kill();
 

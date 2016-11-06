@@ -5,7 +5,7 @@ export default class Food extends Entity {
         this.position = position;
     }
 
-    update(deltaTime) {
+    update(state) {
     }
 
     draw(graphics) {
