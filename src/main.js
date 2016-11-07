@@ -28,11 +28,11 @@ class Main {
     }
 
     initWorld() {
-        this.world = new World();
+        this.world = new World(this);
         this.world.sendGlobal = message => this.socket.send(JSON.stringify(message));
         this.world.sendLocal = message => this.onMessage(message);
 
-        this.player = new Player(100, 100);
+        this.player = new Player(1, 10);
         this.world.addEntity(this.player);
     }
 
@@ -116,11 +116,13 @@ class Main {
     start() {
         this.timer = setInterval(() => {
             var t = new Date().getTime() / 1000;
-            var state = {
-                deltaTime: t - this.lastUpdate
-            };
-            this.update(state);
-            this.draw(t);
+            if (this.lastUpdate) {
+                var state = {
+                    deltaTime: t - this.lastUpdate
+                };
+                this.update(state);
+                this.draw(t);
+            }
             this.lastUpdate = t;
         }, 10);
     }
@@ -130,10 +132,10 @@ class Main {
     }
 
     draw(t) {
-        var r = (Math.sin(t) + 1) * 0.5 * 0.6 + 0.2;
+        /*var r = (Math.sin(t) + 1) * 0.5 * 0.6 + 0.2;
         var g = (Math.cos(t) + 1) * 0.5 * 0.6 + 0.2;
-        var b = 0.5;
-        this.graphics.fillColor(r, g, b);
+        var b = 0.5;*/
+        this.graphics.fillColor(0, 0, 0);
         this.graphics.clear();
         this.world.draw(this.graphics);
     }

@@ -1,14 +1,27 @@
 import Entity from './entity'
 import Tuple2 from './tuple2'
+import Block from './block'
+
+const Direction = {
+    UP: 0,
+    DOWN: 1,
+    LEFT: 2,
+    DOWN: 3,
+}
 
 export default class Player extends Entity {
 
     constructor(x, y) {
         super();
 
-        this.position = new Tuple2(x, y);
-        this.target = new Tuple2(x, y);
+        this.blocks = [];
+        for (var i = 0; i < 10; i++) {
+            this.blocks[i] = new Block(new Tuple2(x, y - i));
+        }
+        this.direction = Direction.DOWN;
         this.drawOrder = 1000;
+        this.blocksPerSecond = 10;
+        this.t = 0;
 
         this.loadResources();
     }
@@ -22,8 +35,6 @@ export default class Player extends Entity {
         if (message.origin == this.constructor.name && message.entityid == this.id) {
             switch (message.action) {
                 case "moveTo":
-                    this.target.x = message.x;
-                    this.target.y = message.y;
                     break;
             }
         }
@@ -36,18 +47,18 @@ export default class Player extends Entity {
     }
 
     onKeyDown(event) {
-        switch (event.key) {
-            case "w":
-                this.target.y -= this.block.height;
+        switch (event.keyCode) {
+            case 37:
+                this.direction = Direction.LEFT;
                 break;
-            case "a":
-                this.target.x -= this.block.width;
+            case 38:
+                this.direction = Direction.UP;
                 break;
-            case "s":
-                this.target.y += this.block.height;
+            case 39:
+                this.direction = Direction.RIGHT;
                 break;
-            case "d":
-                this.target.x += this.block.width;
+            case 40:
+                this.direction = Direction.DOWN;
                 break;
         }
     }
@@ -56,30 +67,45 @@ export default class Player extends Entity {
     }
 
     moveTo(x, y) {
-        this.sendGlobal({
+        /*this.sendGlobal({
             action: "moveTo",
             x: x,
             y: y
-        });
+        });*/
     }
 
     update(state) {
-        this.position.x = this.position.x + 0.15 * (this.target.x - this.position.x);
-        this.position.y = this.position.y + 0.15 * (this.target.y - this.position.y);
+        this.t += state.deltaTime;
     }
 
     draw(graphics) {
-        /*graphics.fillColor(0.55, 0.9, 0.6, 1);
-        graphics.fillCircle(this.position.x, this.position.y, 50);
-        graphics.fillColor(0, 0, 0, 1);
-        graphics.drawCircle(this.position.x, this.position.y, 50, 6);*/
+        if (this.blocksPerSecond * this.t >= 1.0) {
+            this.t -= 1 / this.blocksPerSecond;
 
+            for (var i = this.blocks.length - 1; i > 0; i--) {
+                this.blocks[i].position.x = this.blocks[i - 1].position.x;
+                this.blocks[i].position.y = this.blocks[i - 1].position.y;
+            }
 
-        graphics.drawImage(this.block, this.position.x - this.block.width / 2, this.position.y - this.block.height / 2);
+            switch (this.direction) {
+                case Direction.LEFT:
+                    this.blocks[0].position.x--;
+                    break;
+                case Direction.UP:
+                    this.blocks[0].position.y--;
+                    break;
+                case Direction.RIGHT:
+                    this.blocks[0].position.x++;
+                    break;
+                case Direction.DOWN:
+                    this.blocks[0].position.y++;
+                    break;
+            }
+        }
 
-
-        graphics.fillColor(0, 0, 0, 1);
-        graphics.fillText(this.id, this.position.x - graphics.textWidth(this.id) / 2, this.position.y + 4, 10, true, "Verdana");
+        this.blocks.forEach((block) => {
+            block.draw(graphics);
+        });
     }
 
 }

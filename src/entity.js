@@ -4,7 +4,7 @@ export default class Entity {
         this.alive = true;
         this.drawOrder = 0;
     }
-
+    
     kill() {
         this.alive = false;
     }

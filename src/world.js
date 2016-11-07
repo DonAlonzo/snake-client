@@ -2,7 +2,6 @@ export default class World {
 
     constructor() {
         this.entities = [];
-        this.nextEntityID = 0;
     }
 
     addEntity(entity) {
