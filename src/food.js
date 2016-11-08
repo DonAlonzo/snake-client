@@ -1,8 +1,15 @@
-export default class Food extends Entity {
+import Block from './block'
+
+export default class Food extends Block {
 
     constructor(position) {
-        super();
-        this.position = position;
+        super(position);
+        this.collidables = [this];
+    }
+
+    loadResources() {
+        this.image = new Image;
+        this.image.src = "resources/images/food.png";
     }
 
 }

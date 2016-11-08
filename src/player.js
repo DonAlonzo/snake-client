@@ -1,6 +1,7 @@
 import Entity from './entity'
 import Tuple2 from './tuple2'
 import Block from './block'
+import Food from './food'
 
 const Direction = {
     UP: 0,
@@ -11,16 +12,20 @@ const Direction = {
 
 export default class Player extends Entity {
 
-    constructor(x, y) {
+    constructor(position) {
         super();
 
-        this.blocks = [];
-        for (var i = 0; i < 10; i++) {
-            this.blocks[i] = new Block(new Tuple2(x, y - i));
+        this.head = new Block(position.copy());
+        this.tail = [];
+        for (var i = 1; i <= 2; i++) {
+            this.tail.push(new Block(new Tuple2(position.x, position.y - i)));
         }
+        this.collidables = this.tail;
+
         this.direction = Direction.DOWN;
+        this.lastTraveledDirection = this.direction;
         this.drawOrder = 1000;
-        this.blocksPerSecond = 10;
+        this.blocksPerSecond = 4;
         this.t = 0;
 
         this.loadResources();
@@ -49,16 +54,20 @@ export default class Player extends Entity {
     onKeyDown(event) {
         switch (event.keyCode) {
             case 37:
-                this.direction = Direction.LEFT;
+                if (this.lastTraveledDirection != Direction.RIGHT)
+                    this.direction = Direction.LEFT;
                 break;
             case 38:
-                this.direction = Direction.UP;
+                if (this.lastTraveledDirection != Direction.DOWN)
+                    this.direction = Direction.UP;
                 break;
             case 39:
-                this.direction = Direction.RIGHT;
+                if (this.lastTraveledDirection != Direction.LEFT)
+                    this.direction = Direction.RIGHT;
                 break;
             case 40:
-                this.direction = Direction.DOWN;
+                if (this.lastTraveledDirection != Direction.UP)
+                    this.direction = Direction.DOWN;
                 break;
         }
     }
@@ -75,37 +84,66 @@ export default class Player extends Entity {
     }
 
     update(state) {
-        this.t += state.deltaTime;
+        this.move(state.deltaTime);
+        this.checkCollision();
     }
 
-    draw(graphics) {
-        if (this.blocksPerSecond * this.t >= 1.0) {
+    move(deltaTime) {
+        this.t += deltaTime;
+
+        while (this.blocksPerSecond * this.t >= 1.0) {
             this.t -= 1 / this.blocksPerSecond;
 
-            for (var i = this.blocks.length - 1; i > 0; i--) {
-                this.blocks[i].position.x = this.blocks[i - 1].position.x;
-                this.blocks[i].position.y = this.blocks[i - 1].position.y;
+            for (var i = this.tail.length - 1; i > 0; i--) {
+                this.tail[i].position = this.tail[i - 1].position.copy();
             }
+            this.tail[0].position = this.head.position.copy();
 
             switch (this.direction) {
                 case Direction.LEFT:
-                    this.blocks[0].position.x--;
+                    this.head.position.x--;
                     break;
                 case Direction.UP:
-                    this.blocks[0].position.y--;
+                    this.head.position.y--;
                     break;
                 case Direction.RIGHT:
-                    this.blocks[0].position.x++;
+                    this.head.position.x++;
                     break;
                 case Direction.DOWN:
-                    this.blocks[0].position.y++;
+                    this.head.position.y++;
                     break;
             }
-        }
 
-        this.blocks.forEach((block) => {
+            this.lastTraveledDirection = this.direction;
+        }
+    }
+
+    checkCollision() {
+        this.world.collidables.forEach((collidable) => {
+            if (collidable.position.x == this.head.position.x
+             && collidable.position.y == this.head.position.y) {
+                if (collidable instanceof Food) {
+                    collidable.kill();
+                    this.world.spawnFood();
+
+                    let block = new Block(this.tail[this.tail.length - 1].position.copy());
+                    this.tail.push(block);
+                    this.world.collidables.push(block);
+
+                    this.blocksPerSecond += 0.2;
+                } else {
+                    this.kill();
+                }
+            }
+        });
+        //this.kill();
+    }
+
+    draw(graphics) {
+        this.tail.forEach((block) => {
             block.draw(graphics);
         });
+        this.head.draw(graphics);
     }
 
 }

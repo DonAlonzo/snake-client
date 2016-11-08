@@ -5,7 +5,7 @@ export default class Tuple2 {
         this.y = y;
     }
 
-    clone() {
+    copy() {
         return new Tuple2(this.x, this.y);
     }
 

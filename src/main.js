@@ -2,6 +2,7 @@ import Explosion from './explosion';
 import Player from './player';
 import Graphics from './graphics';
 import World from './world';
+import StartingScreen from './startingscreen';
 
 class Main {
 
@@ -10,6 +11,9 @@ class Main {
         this.initSocket("boman.io", 9002)
         this.initWorld();
         this.initEvents();
+        this.startingScreen = new StartingScreen(this);
+        this.player = new Player(this.world.getSpawn());
+        this.player.alive = false;
     }
 
     initContext() {
@@ -31,9 +35,6 @@ class Main {
         this.world = new World(this);
         this.world.sendGlobal = message => this.socket.send(JSON.stringify(message));
         this.world.sendLocal = message => this.onMessage(message);
-
-        this.player = new Player(1, 10);
-        this.world.addEntity(this.player);
     }
 
     initEvents() {
@@ -107,10 +108,16 @@ class Main {
 
     onKeyDown(event) {
         this.world.onKeyDown(event);
+        this.startingScreen.onKeyDown(event);
     }
 
     onKeyUp(event) {
         this.world.onKeyUp(event);
+    }
+
+    newGame() {
+        this.player = new Player(this.world.getSpawn());
+        this.world.addEntity(this.player);
     }
 
     start() {
@@ -137,11 +144,15 @@ class Main {
         var b = 0.5;*/
         this.graphics.fillColor(0, 0, 0);
         this.graphics.clear();
+
         this.world.draw(this.graphics);
+        if (!this.player.alive) {
+            this.startingScreen.draw(this.graphics);
+        }
     }
 
     stop() {
-        clearInterval(timer);
+        clearInterval(this.timer);
     }
 
 }
