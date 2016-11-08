@@ -6,8 +6,7 @@ export default class StartingScreen {
 
     draw(graphics) {
         graphics.fillColor(1, 1, 1);
-        graphics.fillText('You died you stupid.. sick.. white... white guilt.. ', 100, 100);
-        graphics.fillText('To play again press any key', 100, 120);
+        graphics.fillText('To play press any key', 100, 120);
     }
 
     onKeyDown(event) {
